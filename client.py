@@ -7,9 +7,13 @@ target_ip = input("Enter Receiver IP: ")
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client.connect((target_ip, PORT))
+try:
+    client.connect((target_ip, PORT))
+    print("Connected!")
 
-print("Connected!")
+except Exception as e:
+    print("Connection failed:", e)
+    exit()
 
 
 def receive_messages():
@@ -22,8 +26,9 @@ def receive_messages():
 
             print(f"\nFriend: {message}")
 
-        except:
+        except Exception as e:
 
+            print("\nConnection lost.")
             break
 
 
@@ -36,4 +41,9 @@ while True:
 
     message = input("You: ")
 
-    client.send(message.encode())
+    try:
+        client.send(message.encode())
+
+    except Exception as e:
+        print("Failed to send message.")
+        break
